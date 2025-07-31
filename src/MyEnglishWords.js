@@ -5,16 +5,18 @@ import axios from "axios";
 
 const MyEnglishWords = () => {
 
+    const [randomWord, setRandomWord] = useState(null);
+
     const [inputValues, setInputValues] = useState ({
         englishWord: "",
         hungarianWord: ""
     })
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const { id, value } = e.target;
         setInputValues({
             ...inputValues,
-            [name]: value
+            [id]: value
         });
     }
 
@@ -22,7 +24,7 @@ const MyEnglishWords = () => {
         event.preventDefault();
         axios.post("http://localhost:8080/create-word", inputValues)
             .then(response => {
-                console.log("succes", inputValues.englishWord, inputValues.hungarianWord);
+                console.log("succes", inputValues);
                 setInputValues({
                     englishWord: "",
                     hungarianWord: ""
@@ -30,6 +32,16 @@ const MyEnglishWords = () => {
             })
             .catch(error => {
                 console.log("error:", error);
+            })
+    }
+
+    const randomEnglishWord = () => {
+        axios.get("http://localhost:8080/random-english-word")
+            .then(response => {
+                setRandomWord(response.data);
+            })
+            .catch(error => {
+                console.log("error:", error)
             })
     }
 
@@ -50,9 +62,16 @@ const MyEnglishWords = () => {
                 <div>
                     <button 
                     type="button" 
-                    className="btn btn-secondary btn-lg">
+                    className="btn btn-secondary btn-lg"
+                    onClick={randomEnglishWord}
+                    >                   
                     new word
                     </button>
+                    {randomWord && (
+                        <div>
+                            <p><strong>Random English Word:</strong> {randomWord.englishWord}</p>
+                        </div>
+                    )}
                 </div>
                 <div>
                     <p>response - correct or not, if not correct show the word.</p>
@@ -65,6 +84,7 @@ const MyEnglishWords = () => {
                         <input 
                         type="text" 
                         className="form-control" 
+                        id="englishWord"
                         name="englishWord"
                         value={inputValues.englishWord}
                         onChange={handleInputChange}
@@ -77,6 +97,7 @@ const MyEnglishWords = () => {
                         <input 
                         type="text" 
                         className="form-control" 
+                        id="hungarianWord"
                         name="hungarianWord"
                         value={inputValues.hungarianWord}
                         onChange={handleInputChange}
