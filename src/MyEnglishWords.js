@@ -12,6 +12,12 @@ const MyEnglishWords = () => {
         hungarianWord: ""
     })
 
+    const [hungarianInputValue, setHungarianInputValue] = useState(null);
+
+    const [hungarianWordCorrect, setHungarianWordCorrect] = useState(false);
+
+    const [showCorrectOrNot, setShowCorrectOrNot] = useState(false);
+
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setInputValues({
@@ -38,18 +44,50 @@ const MyEnglishWords = () => {
     const randomEnglishWord = () => {
         axios.get("http://localhost:8080/random-english-word")
             .then(response => {
+                console.log(response.data.id);
+                console.log(response.data);
                 setRandomWord(response.data);
+                setShowCorrectOrNot(false);
             })
             .catch(error => {
                 console.log("error:", error)
             })
     }
 
+    const checkHungarianWord = (event) => {
+        axios.get(`http://localhost:8080/get-hungarian-word/${randomWord.id}`)
+            .then(response => {
+                if(response.data.hungarianWord === hungarianInputValue) {
+                    setHungarianWordCorrect(true);
+                    setShowCorrectOrNot(true);
+                }else{
+                    setHungarianWordCorrect(false);
+                    setShowCorrectOrNot(true);
+                }
+            })
+    }
+
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
-            <div>
+            <div>    
                 <div>
-                    <p>the english word</p>
+                    <div className="d-flex flex-row">
+                        <div>
+                            <p>Random English Word:</p>
+                        </div>
+                        <div>
+                            {randomWord && (
+                                <p>{randomWord.englishWord}</p>                            
+                            )}
+                        </div>
+                    </div>
+                    <button 
+                    type="button" 
+                    className="btn btn-secondary btn-lg mb-3"
+                    onClick={randomEnglishWord}
+                    >                   
+                    new word
+                    </button>  
                 </div>
                 <div class="input-group mb-3">
                     <input 
@@ -57,24 +95,21 @@ const MyEnglishWords = () => {
                     className="form-control" 
                     placeholder="" 
                     aria-label="Username" 
-                    aria-describedby="basic-addon1"/>
+                    aria-describedby="basic-addon1"
+                    onChange={(e) => setHungarianInputValue(e.target.value)}
+                    />
                 </div>
                 <div>
-                    <button 
+                    {showCorrectOrNot && <p>{hungarianWordCorrect ? "correct!" : "not correct!"}</p>}
+                </div>
+                <div>
+                    <button
                     type="button" 
                     className="btn btn-secondary btn-lg"
-                    onClick={randomEnglishWord}
-                    >                   
-                    new word
+                    onClick={checkHungarianWord}
+                    >
+                        check 
                     </button>
-                    {randomWord && (
-                        <div>
-                            <p><strong>Random English Word:</strong> {randomWord.englishWord}</p>
-                        </div>
-                    )}
-                </div>
-                <div>
-                    <p>response - correct or not, if not correct show the word.</p>
                 </div>
                 <div>
                     <p>new word:</p>
