@@ -9,7 +9,7 @@ const MyEnglishWords = () => {
 
     const [inputValues, setInputValues] = useState ({
         englishWord: "",
-        hungarianWord: ""
+        hungarianWord: "",
     })
 
     const [hungarianInputValue, setHungarianInputValue] = useState(null);
@@ -17,6 +17,8 @@ const MyEnglishWords = () => {
     const [hungarianWordCorrect, setHungarianWordCorrect] = useState(false);
 
     const [showCorrectOrNot, setShowCorrectOrNot] = useState(false);
+
+    const [showHunWord, setShowHunWord] = useState(false);
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -44,17 +46,17 @@ const MyEnglishWords = () => {
     const randomEnglishWord = () => {
         axios.get("http://localhost:8080/random-english-word")
             .then(response => {
-                console.log(response.data.id);
-                console.log(response.data);
                 setRandomWord(response.data);
                 setShowCorrectOrNot(false);
+                setShowHunWord(false);
+                setHungarianInputValue("");
             })
             .catch(error => {
                 console.log("error:", error)
             })
     }
 
-    const checkHungarianWord = (event) => {
+    const checkHungarianWord = () => {
         axios.get(`http://localhost:8080/get-hungarian-word/${randomWord.id}`)
             .then(response => {
                 if(response.data.hungarianWord === hungarianInputValue) {
@@ -67,52 +69,71 @@ const MyEnglishWords = () => {
             })
     }
 
+    const showHungarianWord = () => {
+        setShowHunWord(true);
+    }
+
+    
+
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100">
-            <div>    
+        <div className="d-flex justify-content-center align-items-center vh-100">   
+            <div className="d-flex flex-column">
                 <div>
-                    <div className="d-flex flex-row">
-                        <div>
-                            <p>Random English Word:</p>
-                        </div>
-                        <div>
+                    <div>
+                        <div className="english-word-container d-flex justify-content-center align-items-center shadow p-3 mb-3 rounded ">
                             {randomWord && (
-                                <p>{randomWord.englishWord}</p>                            
+                                <p className="fs-3 fw-normal">{randomWord.englishWord}</p>                            
                             )}
                         </div>
                     </div>
-                    <button 
-                    type="button" 
-                    className="btn btn-secondary btn-lg mb-3"
-                    onClick={randomEnglishWord}
-                    >                   
-                    new word
-                    </button>  
-                </div>
-                <div class="input-group mb-3">
-                    <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="" 
-                    aria-label="Username" 
-                    aria-describedby="basic-addon1"
-                    onChange={(e) => setHungarianInputValue(e.target.value)}
-                    />
-                </div>
-                <div>
-                    {showCorrectOrNot && <p>{hungarianWordCorrect ? "correct!" : "not correct!"}</p>}
-                </div>
-                <div>
-                    <button
-                    type="button" 
-                    className="btn btn-secondary btn-lg"
-                    onClick={checkHungarianWord}
-                    >
-                        check 
-                    </button>
-                </div>
-                <div>
-                    <p>new word:</p>
+                    <div className="d-flex justify-content-between">
+                        <button 
+                            type="button" 
+                            className="btn btn-primary btn-lg mb-3 w-50 me-2"
+                            onClick={randomEnglishWord}
+                            >                   
+                            Word
+                        </button>
+                        <button
+                            type="button" 
+                            className="btn btn-danger btn-lg mb-3 w-50"
+                            onClick={showHungarianWord}
+                            >
+                            Show
+                        </button>
+                    </div>
+                    <div className="show-word-container d-flex justify-content-center align-items-center shadow p-3 mb-3 rounded">
+                        {
+                            showHunWord ? <p className="fs-3">{randomWord.hungarianWord}</p> : null
+                        }
+                    </div>
+                    <div class="input-group mb-3">
+                        <input 
+                        type="text" 
+                        className="form-control" 
+                        value={hungarianInputValue}
+                        placeholder="" 
+                        aria-label="Username" 
+                        aria-describedby="basic-addon1"
+                        onChange={(e) => setHungarianInputValue(e.target.value)}
+                        />
+                    </div>
+                    <div className="check-container d-flex flex-row">
+                        <div className="me-5">
+                            <button
+                            type="button" 
+                            className="btn btn-warning btn-lg"
+                            onClick={checkHungarianWord}
+                            >
+                                Check 
+                            </button>
+                        </div>
+                        <div>
+                            {showCorrectOrNot && <p className="fs-3">
+                                {hungarianWordCorrect ? <p className="text-success">correct!</p>
+                                     : <p className="text-danger">wrong!</p>}</p>}
+                        </div>
+                    </div>
                 </div>
                 <div className >
                     <div className="mb-3">
@@ -144,7 +165,7 @@ const MyEnglishWords = () => {
                     <div>
                         <button 
                         type="button" 
-                        className="btn btn-secondary btn-lg"
+                        className="btn btn-success btn-lg"
                         onClick={createWord}
                         >
                         add new word

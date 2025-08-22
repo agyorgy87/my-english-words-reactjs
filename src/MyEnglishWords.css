@@ -1,1 +1,13 @@
 
+.english-word-container {
+    height: 6rem;
+    width: 20rem;
+}
+
+.show-word-container {
+    height: 6rem;          
+}
+
+.check-container {
+    height: 4rem;
+}
