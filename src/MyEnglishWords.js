@@ -1,9 +1,13 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import './MyEnglishWords.css';
 import axios from "axios";
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 
 const MyEnglishWords = () => {
+
+    const [allWords, setAllWords] = useState([]);
 
     const [randomWord, setRandomWord] = useState(null);
 
@@ -19,6 +23,17 @@ const MyEnglishWords = () => {
     const [showCorrectOrNot, setShowCorrectOrNot] = useState(false);
 
     const [showHunWord, setShowHunWord] = useState(false);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/all-words")
+            .then(response => {
+                setAllWords(response.data);
+                
+            })
+            .catch(error => {
+          console.error('error:', error);
+            });
+    }, []);
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -50,6 +65,7 @@ const MyEnglishWords = () => {
                 setShowCorrectOrNot(false);
                 setShowHunWord(false);
                 setHungarianInputValue("");
+                console.log(response.data);
             })
             .catch(error => {
                 console.log("error:", error)
@@ -73,7 +89,17 @@ const MyEnglishWords = () => {
         setShowHunWord(true);
     }
 
-    
+    const deleteWord = (id) => {
+        axios.delete(`http://localhost:8080/delete-word/${id}`)
+          .then(response => {
+            let newList = [...allWords];
+            newList = newList.filter((randomWord) => randomWord.id !== id);
+            setAllWords(newList);
+          })
+          .catch(error => {
+            console.error('error:', error);
+          });
+    }
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">   
@@ -96,7 +122,7 @@ const MyEnglishWords = () => {
                         </button>
                         <button
                             type="button" 
-                            className="btn btn-danger btn-lg mb-3 w-50"
+                            className="btn btn-secondary btn-lg mb-3 w-50"
                             onClick={showHungarianWord}
                             >
                             Show
@@ -118,20 +144,30 @@ const MyEnglishWords = () => {
                         onChange={(e) => setHungarianInputValue(e.target.value)}
                         />
                     </div>
-                    <div className="check-container d-flex flex-row">
-                        <div className="me-5">
-                            <button
-                            type="button" 
-                            className="btn btn-warning btn-lg"
-                            onClick={checkHungarianWord}
-                            >
-                                Check 
-                            </button>
-                        </div>
+                    <div className="check-container d-flex justify-content-between">
+                        <div className="d-flex">
+                            <div className="me-4">
+                                <button
+                                type="button" 
+                                className="btn btn-warning btn-lg"
+                                onClick={checkHungarianWord}
+                                >
+                                    Check 
+                                </button>
+                            </div>
+                            <div>
+                                {showCorrectOrNot && <p className="fs-3">
+                                    {hungarianWordCorrect ? <i className="bi bi-hand-thumbs-up"></i>
+                                        : <i className="bi bi-hand-thumbs-down"></i>}</p>}
+                            </div>
+                        </div>     
                         <div>
-                            {showCorrectOrNot && <p className="fs-3">
-                                {hungarianWordCorrect ? <p className="text-success">correct!</p>
-                                     : <p className="text-danger">wrong!</p>}</p>}
+                            <button 
+                            className="btn btn-danger btn-lg"
+                            onClick={() => deleteWord(randomWord.id)}
+                            >
+                                Delete Word
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -165,10 +201,10 @@ const MyEnglishWords = () => {
                     <div>
                         <button 
                         type="button" 
-                        className="btn btn-success btn-lg"
+                        className="btn btn-success btn-lg new-word-button"
                         onClick={createWord}
                         >
-                        add new word
+                        New word
                         </button>
                     </div>
                 </div>

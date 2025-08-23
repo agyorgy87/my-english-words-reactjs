@@ -11,3 +11,15 @@
 .check-container {
     height: 4rem;
 }
+
+.bi-hand-thumbs-up {
+    color: green !important;
+}
+
+.bi-hand-thumbs-down {
+    color: red !important;
+}
+
+.new-word-button {
+    width: 100%;
+}
