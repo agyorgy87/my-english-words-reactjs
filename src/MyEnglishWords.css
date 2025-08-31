@@ -1,15 +1,33 @@
 
 .english-word-container {
-    height: 6rem;
-    width: 20rem;
+    height: 8rem;
+    width: 22rem;
+}
+
+.fonts-setup {
+    font-size: 33px;
+}
+
+.btn {
+    height: 4rem !important;
+    font-size: 28px !important;
 }
 
 .show-word-container {
-    height: 6rem;          
+    height: 8rem;          
+}
+
+.form-control {
+    height: 3rem;
+    font-size: 20px !important;
 }
 
 .check-container {
     height: 4rem;
+}
+
+.bi {
+    font-size: 45px;
 }
 
 .bi-hand-thumbs-up {
@@ -23,3 +41,9 @@
 .new-word-button {
     width: 100%;
 }
+
+/*
+@media only screen and (max-width: 440px) {
+
+}
+*/

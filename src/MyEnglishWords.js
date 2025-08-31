@@ -102,20 +102,20 @@ const MyEnglishWords = () => {
     }
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100">   
-            <div className="d-flex flex-column">
+        <div className="d-flex justify-content-center vh-100">   
+            <div className="d-flex flex-column mt-5">
                 <div>
-                    <div>
+                    <div className="mb-4">
                         <div className="english-word-container d-flex justify-content-center align-items-center shadow p-3 mb-3 rounded ">
                             {randomWord && (
-                                <p className="fs-3 fw-normal">{randomWord.englishWord}</p>                            
+                                <p className="fonts-setup">{randomWord.englishWord}</p>                            
                             )}
                         </div>
                     </div>
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between mb-3">
                         <button 
                             type="button" 
-                            className="btn btn-primary btn-lg mb-3 w-50 me-2"
+                            className="btn btn-primary btn-lg mb-3 w-50 me-2 "
                             onClick={randomEnglishWord}
                             >                   
                             Word
@@ -128,12 +128,12 @@ const MyEnglishWords = () => {
                             Show
                         </button>
                     </div>
-                    <div className="show-word-container d-flex justify-content-center align-items-center shadow p-3 mb-3 rounded">
+                    <div className="show-word-container d-flex justify-content-center align-items-center shadow p-3 mb-4 rounded">
                         {
-                            showHunWord ? <p className="fs-3">{randomWord.hungarianWord}</p> : null
+                            showHunWord ? <p className="fonts-setup">{randomWord.hungarianWord}</p> : null
                         }
                     </div>
-                    <div class="input-group mb-3">
+                    <div className="input-group mb-4">
                         <input 
                         type="text" 
                         className="form-control" 
@@ -144,9 +144,9 @@ const MyEnglishWords = () => {
                         onChange={(e) => setHungarianInputValue(e.target.value)}
                         />
                     </div>
-                    <div className="check-container d-flex justify-content-between">
+                    <div className="check-container d-flex justify-content-between mb-5">
                         <div className="d-flex">
-                            <div className="me-4">
+                            <div className="me-1">
                                 <button
                                 type="button" 
                                 className="btn btn-warning btn-lg"
@@ -171,8 +171,8 @@ const MyEnglishWords = () => {
                         </div>
                     </div>
                 </div>
-                <div className >
-                    <div className="mb-3">
+                <div className="mt-4">
+                    <div className="mb-4">
                         <input 
                         type="text" 
                         className="form-control" 
@@ -185,7 +185,7 @@ const MyEnglishWords = () => {
                         aria-describedby="basic-addon1"
                         />
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-4">
                         <input 
                         type="text" 
                         className="form-control" 
